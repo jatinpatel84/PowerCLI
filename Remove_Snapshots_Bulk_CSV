@@ -1,0 +1,17 @@
+
+$path= split-path -Parent $MyInvocation.MyCommand.Definition
+$newpath = $path + ".\rmsnapshot.csv"
+$csv =@()
+$CSV = Import-CSV -Path $newpath
+
+Connect-VIServer -Server GBVWS-VC001.ad.plc.cwintra.com
+Connect-VIServer -server GBVWS-VC002.ad.plc.cwintra.com 
+
+
+foreach ($line in $csv)
+
+    {
+        $vm=$line.vm
+
+        Get-snapshot -vm $vm | Remove-Snapshot -RunAsync -confirm:$false
+    }
