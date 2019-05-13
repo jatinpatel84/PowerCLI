@@ -4,9 +4,7 @@ $newpath = $path + ".\rmsnapshot.csv"
 $csv =@()
 $CSV = Import-CSV -Path $newpath
 
-Connect-VIServer -Server GBVWS-VC001.ad.plc.cwintra.com
-Connect-VIServer -server GBVWS-VC002.ad.plc.cwintra.com 
-
+Connect-VIServer -Server VCenterServer
 
 foreach ($line in $csv)
 
