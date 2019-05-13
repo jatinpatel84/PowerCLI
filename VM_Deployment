@@ -1,0 +1,44 @@
+################################
+#
+# PowerCLI script to Deploy VMs
+#
+#################################
+
+# Import CSV 
+
+$path = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$newpath = $path + "\.VMs.csv"
+$csv = @()
+$csv = Import-Csv -Path $newpath
+
+# Logs
+
+$timestamp = Get-Date -format yyyy.MM.dd-hh.mm.ss
+
+foreach ( $vam in $csv )
+
+{
+
+  
+  # Set Variables 
+
+  $template = Get-Template -name $vm.template
+  $vmname = $vm.vmname
+  $vmhost = $vm.vmhost
+  $datastore = $vm.datastore
+  $resourcepool = $vm.resourcepool 
+  $viserver = $vm.viserver
+
+  # Connect to VI server
+
+  Connect-VIServer -server $viserver 
+
+  # Deploy a New VM using the template
+
+  New-VM -name $vmname -template $template -vmhost $vmhost -datastore $datastore -resourcepool $resourcepool
+
+ #Power ON VM
+
+  Start-VM -name $vmname 
+
+}
